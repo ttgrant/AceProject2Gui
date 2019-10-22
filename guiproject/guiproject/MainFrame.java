@@ -1,6 +1,16 @@
+//Grant Lazenby
+//OO Java 3381
+//gui project
+
+
+
 package guiproject;
 
+
+
 import java.awt.BorderLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,6 +29,15 @@ public class MainFrame {
 		
 		frame.pack();
 		frame.setVisible(true);
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowclosing(WindowEvent e) {
+				MainPanel.doClose();
+				System.exit(0);
+				}
+			
+		});
+		
+		
 	}
 
 }

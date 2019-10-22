@@ -1,3 +1,8 @@
+//Grant Lazenby
+//OO Java 3381
+//gui project
+
+
 package guiproject;
 
 import java.awt.*;
@@ -16,23 +21,22 @@ public class MainPanel extends JPanel {
 
 	private int delay;
 
+	//all of the objects in the panel
 	private JPanel warning;
 
 	private JButton showIcon;
 	private JButton changeSpeed;
 	private final Action action = new SwingAction();
-	private JTextPane txtpnHello;
 	private JButton btnSomething;
 	private JButton btnStart;
 
 	private final Action action_1 = new SwingAction_1();
 	private JButton btnFindPatient;
 	private final Action action_2 = new SwingAction_2();
-	private JComboBox comboBox;
 	private JList list;
 	private final Action action_3 = new SwingAction_3();
 	private JButton btnCreatePatient;
-	private AceDataManager myData;
+	private static AceDataManager myData;
 	private JTextPane test;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JRadioButton rdbtnCloseAceList;
@@ -44,27 +48,28 @@ public class MainPanel extends JPanel {
 	private JButton btnRemoveAce;
 	private JTextField searchID;
 	private JLabel lblFindById;
-	private JLabel lblFindBy;
 	private JButton btnSearch;
 	private JButton btnAddAce2;
 	private JButton btnRemoveAce2;
 	private JButton btnFinishsave2;
 	private Patient ph2;
-
+	private JComboBox acedropdown;
+	private JLabel lblCurrentAceList;
+	private JLabel lblAddAce;
 	// -----------------------------------------------------------------
 	// Sets up the panel, including the timer for the animation.
 	// -----------------------------------------------------------------
 	public MainPanel() {
 		super(new BorderLayout());
-		myData = new AceDataManager("data.txt", "hello");
+		//initalizing my data
+		myData = new AceDataManager("./guiproject/data.txt", "./data.txt");
 
-		Patient p1 = new Patient();
-		p1.setId("1234");
-		p1.setName("Grant Lazenby");
-		myData.addPatient(p1);
+		ph2 = new Patient();
+	
 
 		delay = 20;
 
+		//creation of all the buttons labels etc
 		warning = new JPanel();
 		warning.setPreferredSize(new Dimension(800, 600));
 		warning.setBackground(Color.LIGHT_GRAY);
@@ -76,33 +81,22 @@ public class MainPanel extends JPanel {
 
 		btnStart = new JButton();
 		btnStart.setAction(action);
-		btnStart.setBounds(317, 218, 89, 23);
+		btnStart.setBounds(317, 116, 89, 23);
 		warning.add(btnStart);
 
 		btnSomething = new JButton("Add Patient");
 		btnSomething.setAction(action_1);
-		btnSomething.setBounds(43, 48, 112, 23);
+		btnSomething.setBounds(178, 48, 112, 23);
 		warning.add(btnSomething);
-
-		txtpnHello = new JTextPane();
-		txtpnHello.setEditable(false);
-		txtpnHello.setText(myData.toString());
-		txtpnHello.setBounds(663, 11, 101, 173);
-		warning.add(txtpnHello);
 
 		btnFindPatient = new JButton("Find Patient");
 		btnFindPatient.setAction(action_2);
-		btnFindPatient.setBounds(165, 48, 112, 23);
+		btnFindPatient.setBounds(416, 48, 112, 23);
 		warning.add(btnFindPatient);
-
-		comboBox = new JComboBox();
-		comboBox.setMaximumRowCount(100);
-		comboBox.setBounds(165, 105, 112, 22);
-		warning.add(comboBox);
 
 		btnCreatePatient = new JButton("Create Patient");
 		btnCreatePatient.setAction(action_3);
-		btnCreatePatient.setBounds(43, 105, 125, 23);
+		btnCreatePatient.setBounds(178, 161, 125, 23);
 		warning.add(btnCreatePatient);
 
 		test = new JTextPane();
@@ -110,24 +104,26 @@ public class MainPanel extends JPanel {
 		warning.add(test);
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(174, 161, 232, 127);
+		scrollPane.setBounds(416, 255, 232, 127);
 		warning.add(scrollPane);
 
 		list = new JList(myData.getAceList());
 		scrollPane.setViewportView(list);
 		list.setVisible(false);
 
+		//and action listener on a radio button
 		rdbtnOpenAceList = new JRadioButton("Open ACE List");
 		rdbtnOpenAceList.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				list.setVisible(true);
+				
 				scrollPane.setVisible(true);
 			}
 		});
 		buttonGroup.add(rdbtnOpenAceList);
-		rdbtnOpenAceList.setBounds(46, 161, 122, 23);
+		rdbtnOpenAceList.setBounds(411, 218, 122, 23);
 		warning.add(rdbtnOpenAceList);
-
+		//and action listener on a radio button
 		rdbtnCloseAceList = new JRadioButton("Close ACE List");
 		rdbtnCloseAceList.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -136,7 +132,7 @@ public class MainPanel extends JPanel {
 			}
 		});
 		buttonGroup.add(rdbtnCloseAceList);
-		rdbtnCloseAceList.setBounds(46, 187, 122, 23);
+		rdbtnCloseAceList.setBounds(535, 218, 122, 23);
 		warning.add(rdbtnCloseAceList);
 
 		label = new JLabel("Patient Manager");
@@ -145,7 +141,7 @@ public class MainPanel extends JPanel {
 
 		btnNewButton = new JButton("Finish/Save");
 
-		btnNewButton.setBounds(261, 288, 125, 23);
+		btnNewButton.setBounds(152, 288, 125, 23);
 		warning.add(btnNewButton);
 
 		btnAddAce = new JButton("Add ACE");
@@ -153,6 +149,7 @@ public class MainPanel extends JPanel {
 		btnAddAce.setBounds(43, 218, 125, 23);
 		warning.add(btnAddAce);
 
+		//action on a button
 		btnRemoveAce = new JButton("Remove ACE");
 		btnRemoveAce.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -163,27 +160,24 @@ public class MainPanel extends JPanel {
 		warning.add(btnRemoveAce);
 
 		searchID = new JTextField();
-		searchID.setBounds(287, 106, 96, 20);
+		searchID.setBounds(416, 162, 96, 20);
 		warning.add(searchID);
 		searchID.setColumns(10);
 
 		lblFindById = new JLabel("Search by ID");
-		lblFindById.setBounds(287, 92, 96, 14);
+		lblFindById.setBounds(416, 150, 96, 14);
 		warning.add(lblFindById);
-
-		lblFindBy = new JLabel(" Find by Dropdown");
-		lblFindBy.setBounds(165, 92, 112, 14);
-		warning.add(lblFindBy);
 
 		btnSearch = new JButton("Search");
 
-		btnSearch.setBounds(390, 105, 89, 23);
+		btnSearch.setBounds(522, 161, 89, 23);
 		warning.add(btnSearch);
 
 		btnAddAce2 = new JButton("Add ACE");
 		btnAddAce2.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				ph2.addACE((String) list.getSelectedValue());
+				ph2.addACE((String) acedropdown.getSelectedItem());
+				//ph2.addACE((String) list.getSelectedValue());
 				test.setText(ph2.toString());
 			}
 		});
@@ -193,13 +187,15 @@ public class MainPanel extends JPanel {
 		btnRemoveAce2 = new JButton("Remove ACE");
 		btnRemoveAce2.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				ph2.removeACE((String) list.getSelectedValue());
+				ph2.removeACE((String) acedropdown.getSelectedItem());
+				//ph2.removeACE((String) list.getSelectedValue());
 				test.setText(ph2.toString());
 			}
 		});
 		btnRemoveAce2.setBounds(43, 252, 125, 23);
 		warning.add(btnRemoveAce2);
 
+		//save the program make things visable /invis
 		btnFinishsave2 = new JButton("Finish/Save");
 		btnFinishsave2.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -213,26 +209,42 @@ public class MainPanel extends JPanel {
 				test.setVisible(false);
 				list.setVisible(false);
 				scrollPane.setVisible(false);
-				comboBox.setVisible(false);
+			
 				lblFindById.setVisible(false);
-				lblFindBy.setVisible(false);
+				
 				searchID.setVisible(false);
 				btnSearch.setVisible(false);
 				btnSomething.setVisible(true);
 				btnFindPatient.setVisible(true);
+				acedropdown.setVisible(false);
+				lblCurrentAceList.setVisible(false);
+				lblAddAce.setVisible(false);
+				myData.writeToFile();
 			}
 		});
 		btnFinishsave2.setBounds(280, 288, 126, 23);
 		warning.add(btnFinishsave2);
+		
+		acedropdown = new JComboBox();
+		acedropdown.setModel(new DefaultComboBoxModel(myData.getAceList()));
+		acedropdown.setBounds(178, 218, 231, 22);
+		warning.add(acedropdown);
+		
+		lblAddAce = new JLabel("Add ACE");
+		lblAddAce.setBounds(244, 204, 139, 14);
+		warning.add(lblAddAce);
+		
+		lblCurrentAceList = new JLabel("View ACE");
+		lblCurrentAceList.setBounds(487, 204, 237, 14);
+		warning.add(lblCurrentAceList);
+		
 
 		scrollPane.setVisible(false);
 		rdbtnCloseAceList.setVisible(false);
 		rdbtnOpenAceList.setVisible(false);
 		btnSomething.setVisible(false);
-		comboBox.setVisible(false);
 		btnCreatePatient.setVisible(false);
 		btnFindPatient.setVisible(false);
-		txtpnHello.setVisible(false);
 		btnNewButton.setVisible(false);
 		btnAddAce.setVisible(false);
 		btnRemoveAce.setVisible(false);
@@ -242,12 +254,14 @@ public class MainPanel extends JPanel {
 		scrollPane.setVisible(false);
 		test.setVisible(false);
 		lblFindById.setVisible(false);
-		lblFindBy.setVisible(false);
 		searchID.setVisible(false);
 		btnSearch.setVisible(false);
 		btnAddAce2.setVisible(false);
 		btnRemoveAce2.setVisible(false);
 		btnFinishsave2.setVisible(false);
+		acedropdown.setVisible(false);
+		lblCurrentAceList.setVisible(false);
+		lblAddAce.setVisible(false);
 
 	}
 
@@ -297,9 +311,9 @@ public class MainPanel extends JPanel {
 			
 			btnSomething.setVisible(false);
 			btnFindPatient.setVisible(false);
-			comboBox.setVisible(true);
+
 			lblFindById.setVisible(true);
-			lblFindBy.setVisible(true);
+	
 			searchID.setVisible(true);
 			btnSearch.setVisible(true);
 
@@ -318,6 +332,11 @@ public class MainPanel extends JPanel {
 						btnRemoveAce2.setVisible(true);
 						btnFinishsave2.setVisible(true);
 						test.setVisible(true);
+						acedropdown.setVisible(true);
+						lblCurrentAceList.setVisible(true);
+						lblAddAce.setVisible(true);
+						
+
 
 					}
 
@@ -342,28 +361,29 @@ public class MainPanel extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Creates a patient");
 		}
 
+		//making a dialog box for the user to see
 		public void actionPerformed(ActionEvent e) {
-
-			Patient ph = new Patient();
+			ph2 = new Patient();
+			
 
 			do {
 				try {
 					String delayStr = JOptionPane.showInputDialog("Enter Patient ID");
-					ph.setId(delayStr);
+					ph2.setId(delayStr);
 				} catch (Exception e1) {
-					ph.setId(null);
+					ph2.setId(null);
 				}
-			} while (ph.getId() == null || myData.getPatient(ph.getId()) != null);
-			test.setText(ph.toString());
+			} while (ph2.getId() == null || myData.getPatient(ph2.getId()) != null);
+			test.setText(ph2.toString());
 			do {
 				try {
 					String delayStr = JOptionPane.showInputDialog("Enter Patient Name");
-					ph.setName(delayStr);
+					ph2.setName(delayStr);
 				} catch (Exception e1) {
-					ph.setId(null);
+					ph2.setId(null);
 				}
-			} while (ph.getName() == null);
-			test.setText(ph.toString());
+			} while (ph2.getName() == null);
+			test.setText(ph2.toString());
 			btnCreatePatient.setVisible(false);
 			rdbtnCloseAceList.setVisible(true);
 			rdbtnOpenAceList.setVisible(true);
@@ -373,23 +393,29 @@ public class MainPanel extends JPanel {
 			btnRemoveAce.setVisible(true);
 			btnNewButton.setVisible(true);
 			test.setVisible(true);
+			acedropdown.setVisible(true);
+			lblCurrentAceList.setVisible(true);
+			lblAddAce.setVisible(true);
+
 
 			btnAddAce.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
-					ph.addACE((String) list.getSelectedValue());
-					test.setText(ph.toString());
+					ph2.addACE((String) acedropdown.getSelectedItem());
+					//ph2.addACE((String) list.getSelectedValue());
+					test.setText(ph2.toString());
 				}
 			});
 			btnRemoveAce.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
-					ph.removeACE(((String) list.getSelectedValue()));
-					test.setText(ph.toString());
+					ph2.removeACE((String) acedropdown.getSelectedItem());
+					//ph2.removeACE((String) list.getSelectedValue());
+					test.setText(ph2.toString());
 				}
 			});
 			btnNewButton.addMouseListener(new MouseAdapter() {
 
 				public void mouseClicked(MouseEvent e) {
-					myData.addPatient(ph);
+					myData.addPatient(ph2);
 					test.setText(myData.toString());
 					btnNewButton.setVisible(false);
 					btnAddAce.setVisible(false);
@@ -401,11 +427,30 @@ public class MainPanel extends JPanel {
 					test.setVisible(false);
 					btnSomething.setVisible(true);
 					btnFindPatient.setVisible(true);
-
+					acedropdown.setVisible(false);
+					lblAddAce.setVisible(false);
+					lblCurrentAceList.setVisible(false);
+					myData.writeToFile();
+					
+					
 				}
 			});
 
 		}
 	}
 
+
+
+
+
+
+
+
+
+	public static void doClose() {
+		// TODO Auto-generated method stub
+		myData.writeToFile();
+		
+		
+	}
 }
